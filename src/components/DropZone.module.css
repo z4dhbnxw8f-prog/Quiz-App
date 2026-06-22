@@ -1,0 +1,40 @@
+.zone {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 76px;
+  padding: 11px;
+  color: var(--navy);
+  border: 1.5px dashed #aebad0;
+  border-radius: 11px;
+  background: #fbfcff;
+  text-align: left;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.zone:hover,
+.over {
+  border-color: var(--blue);
+  background: var(--blue-soft);
+  box-shadow: 0 0 0 3px rgba(18, 84, 232, 0.08);
+}
+
+.correct {
+  border-style: solid;
+  border-color: #56bd75;
+  background: var(--green-soft);
+}
+
+.wrong {
+  border-style: solid;
+  border-color: #ef7586;
+  background: var(--red-soft);
+}
+
+.placeholder {
+  color: #73809b;
+  font-size: 14px;
+}

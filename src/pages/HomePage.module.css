@@ -1,0 +1,404 @@
+.page {
+  width: min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 58px 0 54px;
+}
+
+.libraryBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 30px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.libraryBack:hover {
+  color: var(--blue);
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 48px;
+  align-items: center;
+  margin-bottom: 38px;
+}
+
+.intro h1 {
+  max-width: 790px;
+  margin-bottom: 18px;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(44px, 5.4vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.065em;
+}
+
+.intro p {
+  max-width: 680px;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.codeMark {
+  position: relative;
+  display: grid;
+  width: 174px;
+  height: 142px;
+  place-items: center;
+  justify-self: end;
+  color: var(--blue);
+  border: 2px solid #cbd8f6;
+  border-radius: 28px;
+  background: #fff;
+  box-shadow: 12px 14px 0 #dce6fb;
+  font-family: 'Manrope', monospace;
+  font-size: 38px;
+  font-weight: 800;
+  transform: rotate(2deg);
+}
+
+.codeMark::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 34px;
+  content: '';
+  border-radius: 25px 25px 0 0;
+  background: var(--blue);
+}
+
+.dot {
+  position: absolute;
+  z-index: 1;
+  top: 13px;
+  left: 18px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 16px 0 0 white, 32px 0 0 white;
+}
+
+.codeMark > span:last-child {
+  padding-top: 28px;
+}
+
+.levelList {
+  display: grid;
+  gap: 11px;
+}
+
+.levelRow {
+  display: grid;
+  grid-template-columns: 68px minmax(280px, 1fr) minmax(190px, 0.62fr) 124px;
+  gap: 22px;
+  align-items: center;
+  min-height: 104px;
+  padding: 17px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(20, 37, 76, 0.035);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.levelRow:hover {
+  transform: translateY(-2px);
+  border-color: #b8c7dd;
+  box-shadow: 0 12px 24px rgba(20, 37, 76, 0.07);
+}
+
+.levelNumber {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  color: white;
+  border-radius: 12px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 29px;
+  font-weight: 800;
+}
+
+.blue {
+  background: #1158ed;
+}
+
+.mint {
+  background: #26bfa0;
+}
+
+.coral {
+  background: #f05462;
+}
+
+.yellow {
+  color: #654b00;
+  background: #ffc21a;
+}
+
+.violet {
+  background: #6548dc;
+}
+
+.levelCopy h2 {
+  margin-bottom: 4px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 19px;
+  letter-spacing: -0.025em;
+}
+
+.levelCopy p {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.levelCopy > span {
+  color: #7a879e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.levelProgress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.levelProgress > div {
+  flex: 1;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e7ecf3;
+}
+
+.levelProgress > div span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--blue);
+  transition: width 300ms ease;
+}
+
+.levelProgress strong {
+  width: 42px;
+  color: #66748c;
+  font-size: 12px;
+  text-align: right;
+}
+
+.levelAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 43px;
+  color: var(--ink);
+  border: 1px solid #bdc9da;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.levelAction:hover {
+  color: white;
+  border-color: var(--blue);
+  background: var(--blue);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 86px minmax(210px, 1fr) auto auto auto;
+  gap: 24px;
+  align-items: center;
+  margin-top: 17px;
+  padding: 22px 25px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: white;
+}
+
+.progressCircle {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--blue) var(--progress), #e7ecf3 0);
+}
+
+.progressCircle::before {
+  grid-area: 1 / 1;
+  width: 56px;
+  height: 56px;
+  content: '';
+  border-radius: 50%;
+  background: white;
+}
+
+.progressCircle span {
+  z-index: 1;
+  grid-area: 1 / 1;
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.summaryLead,
+.summaryStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.summaryLead {
+  gap: 5px;
+}
+
+.summaryLead strong {
+  font-family: 'Manrope', sans-serif;
+  font-size: 17px;
+}
+
+.summaryLead span,
+.summaryStat span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.summaryStat {
+  display: grid;
+  grid-template-columns: 28px auto;
+  column-gap: 8px;
+  min-width: 125px;
+  padding-left: 24px;
+  border-left: 1px solid var(--line);
+}
+
+.summaryStat svg {
+  grid-row: 1 / 3;
+  align-self: center;
+  color: var(--blue);
+}
+
+.summaryStat strong {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+}
+
+.reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  color: #67748b;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.reset:hover {
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .intro {
+    grid-template-columns: 1fr 150px;
+  }
+
+  .codeMark {
+    width: 140px;
+    height: 122px;
+  }
+
+  .levelRow {
+    grid-template-columns: 62px minmax(0, 1fr) 116px;
+  }
+
+  .levelProgress {
+    grid-column: 2 / 3;
+  }
+
+  .levelAction {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+
+  .summary {
+    grid-template-columns: 76px 1fr auto auto;
+  }
+
+  .reset {
+    grid-column: 2 / -1;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 650px) {
+  .page {
+    width: min(100% - 30px, 1160px);
+    padding: 38px 0;
+  }
+
+  .intro {
+    display: block;
+  }
+
+  .intro h1 {
+    font-size: 42px;
+  }
+
+  .intro p {
+    font-size: 16px;
+  }
+
+  .codeMark {
+    display: none;
+  }
+
+  .levelRow {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 15px;
+    padding: 16px;
+  }
+
+  .levelNumber {
+    width: 50px;
+    height: 50px;
+    font-size: 23px;
+  }
+
+  .levelProgress {
+    grid-column: 1 / -1;
+  }
+
+  .levelAction {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .summary {
+    grid-template-columns: 70px 1fr;
+    gap: 18px;
+  }
+
+  .summaryStat {
+    min-width: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .reset {
+    grid-column: 1 / -1;
+  }
+}

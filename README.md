@@ -1,8 +1,12 @@
-# IHK Drag & Drop Trainer
+# WebWise IHK Quiz App
 
-A React + Vite study app for practicing IHK Junior Web Developer drag-and-drop
-questions. Progress is saved in the browser with `localStorage`; no backend is
-required.
+A bilingual English/German study app built with React and Vite. It includes:
+
+- A 100-question Web Basics multiple-choice quiz split into five levels.
+- “IHK App by Nick Questions,” with 65 question-and-answer study cards.
+- Saved quiz and study progress using `localStorage`.
+- Responsive desktop and mobile layouts.
+- Single-answer, multiple-answer, answer-reveal, scoring, and review flows.
 
 ## Run locally
 
@@ -21,19 +25,18 @@ npm run lint
 npm run preview
 ```
 
-## Add more questions
+## Question data
 
-Edit `src/questions.js`. Use the existing `match`, `order`, or `group` examples
-and include:
+- `src/questions.js` contains the 100-question Web Basics quiz.
+- `src/neckQuestions.js` contains the 65 “IHK App by Nick Questions” study
+  cards.
 
-- `id`
-- `topic`
-- `type`
-- `prompt`
-- `items`
-- `correctAnswer`
-- `explanation`
+Both collections provide English and German content.
 
-The home topic list, practice sessions, progress view, and review system all
-read from that single file.
-# Quiz-App
+## Technology
+
+- React 19
+- React Router
+- Vite
+- CSS Modules
+- Lucide React

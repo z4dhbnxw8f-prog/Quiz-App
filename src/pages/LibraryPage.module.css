@@ -1,0 +1,323 @@
+.page {
+  width: min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 72px 0 58px;
+}
+
+.intro {
+  max-width: 760px;
+  margin-bottom: 45px;
+}
+
+.intro h1 {
+  margin-bottom: 16px;
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(48px, 6vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.065em;
+}
+
+.intro p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.collections {
+  display: grid;
+  gap: 16px;
+}
+
+.collection {
+  position: relative;
+  display: grid;
+  grid-template-columns: 78px minmax(300px, 1fr) minmax(200px, 0.55fr) 136px;
+  gap: 25px;
+  align-items: center;
+  min-height: 150px;
+  padding: 25px 27px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: white;
+  box-shadow: 0 7px 24px rgba(20, 37, 76, 0.05);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.collection::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  content: '';
+  background: var(--blue);
+}
+
+.neckCollection::before {
+  background: #20b996;
+}
+
+.collection:hover {
+  transform: translateY(-2px);
+  border-color: #b9c7db;
+  box-shadow: 0 15px 32px rgba(20, 37, 76, 0.08);
+}
+
+.collectionIcon {
+  display: grid;
+  width: 70px;
+  height: 70px;
+  place-items: center;
+  color: white;
+  border-radius: 16px;
+}
+
+.blue {
+  background: var(--blue);
+  box-shadow: 7px 8px 0 #d8e4fd;
+}
+
+.mint {
+  background: #20b996;
+  box-shadow: 7px 8px 0 #d0f1e8;
+}
+
+.collectionCopy h2 {
+  margin-bottom: 7px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+
+.collectionCopy p {
+  max-width: 610px;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.collectionCopy span {
+  color: #6d7b92;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.collectionProgress {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.collectionProgress > div {
+  flex: 1;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #e6ebf2;
+}
+
+.collectionProgress > div span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--blue);
+}
+
+.neckCollection .collectionProgress > div span {
+  background: #20b996;
+}
+
+.collectionProgress strong {
+  width: 40px;
+  color: #66748b;
+  font-size: 13px;
+  text-align: right;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  color: white;
+  border-radius: 9px;
+  background: var(--blue);
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 7px 15px rgba(17, 88, 237, 0.18);
+}
+
+.neckCollection .action {
+  background: #139d7d;
+  box-shadow: 0 7px 15px rgba(19, 157, 125, 0.18);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 86px minmax(220px, 1fr) auto auto auto;
+  gap: 25px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 24px 27px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: white;
+}
+
+.progressCircle {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--blue) var(--progress), #e7ecf3 0);
+}
+
+.progressCircle::before {
+  grid-area: 1 / 1;
+  width: 56px;
+  height: 56px;
+  content: '';
+  border-radius: 50%;
+  background: white;
+}
+
+.progressCircle span {
+  z-index: 1;
+  grid-area: 1 / 1;
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.summaryLead {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.summaryLead strong {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+}
+
+.summaryLead span,
+.stat span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: 28px auto;
+  column-gap: 8px;
+  min-width: 125px;
+  padding-left: 24px;
+  border-left: 1px solid var(--line);
+}
+
+.stat svg {
+  grid-row: 1 / 3;
+  align-self: center;
+  color: var(--blue);
+}
+
+.stat strong {
+  font-family: 'Manrope', sans-serif;
+  font-size: 18px;
+}
+
+.reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #69768b;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.reset:hover {
+  color: var(--red);
+}
+
+@media (max-width: 900px) {
+  .collection {
+    grid-template-columns: 74px minmax(0, 1fr) 130px;
+  }
+
+  .collectionProgress {
+    grid-column: 2 / 3;
+  }
+
+  .action {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+
+  .summary {
+    grid-template-columns: 76px 1fr auto auto;
+  }
+
+  .reset {
+    grid-column: 2 / -1;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 650px) {
+  .page {
+    width: min(100% - 30px, 1160px);
+    padding: 44px 0;
+  }
+
+  .intro h1 {
+    font-size: 43px;
+  }
+
+  .intro p {
+    font-size: 16px;
+  }
+
+  .collection {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 18px;
+    padding: 22px 18px;
+  }
+
+  .collectionIcon {
+    width: 56px;
+    height: 56px;
+    border-radius: 13px;
+  }
+
+  .collectionCopy h2 {
+    font-size: 21px;
+  }
+
+  .collectionProgress,
+  .action {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .summary {
+    grid-template-columns: 72px 1fr;
+  }
+
+  .stat {
+    min-width: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .reset {
+    grid-column: 1 / -1;
+  }
+}

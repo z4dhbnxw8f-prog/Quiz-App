@@ -1,0 +1,175 @@
+.matchLayout {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.7fr) minmax(360px, 1.5fr);
+  gap: 42px;
+}
+
+.termBank,
+.definitionList,
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bankEmpty {
+  margin: 0;
+  padding: 20px;
+  color: var(--muted);
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.matchZone {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.65fr) minmax(180px, 1fr);
+  gap: 18px;
+  min-height: 82px;
+  padding: 10px 18px 10px 10px;
+}
+
+.answerSlot {
+  min-width: 0;
+}
+
+.emptySlot {
+  display: block;
+  width: 74px;
+  height: 54px;
+  border: 1.5px dashed #9fb2d1;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.definitionText {
+  align-self: center;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.orderList {
+  max-width: 720px;
+}
+
+.orderNumber {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  margin-left: -4px;
+  place-items: center;
+  color: #fff;
+  border-radius: 8px;
+  background: var(--blue);
+  font-size: 13px;
+}
+
+.groupBank {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(130px, 1fr));
+  gap: 10px;
+  min-height: 70px;
+  margin-bottom: 28px;
+  padding: 14px;
+  border: 1px dashed #aebad0;
+  border-radius: 12px;
+  background: #f8faff;
+}
+
+.groupBank .bankEmpty {
+  grid-column: 1 / -1;
+}
+
+.groupGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.groupSection {
+  min-width: 0;
+}
+
+.groupSection h3 {
+  margin-bottom: 10px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+}
+
+.groupSection h3 button {
+  padding: 3px 0;
+  color: var(--navy);
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+}
+
+.groupSection h3 button:hover:not(:disabled) {
+  color: var(--blue);
+}
+
+.groupSection h3 button:disabled {
+  cursor: default;
+}
+
+.groupZone {
+  align-items: stretch;
+  min-height: 180px;
+}
+
+.groupItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.dragOverlay {
+  min-width: 180px;
+  padding: 15px 18px;
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 18px 38px rgba(9, 62, 196, 0.2);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .matchLayout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .termBank {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .matchZone {
+    grid-template-columns: minmax(104px, 0.7fr) minmax(120px, 1fr);
+    gap: 10px;
+    padding-right: 10px;
+  }
+
+  .definitionText {
+    font-size: 14px;
+  }
+
+  .groupBank,
+  .groupGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 430px) {
+  .termBank,
+  .groupBank,
+  .groupGrid {
+    grid-template-columns: 1fr;
+  }
+}
