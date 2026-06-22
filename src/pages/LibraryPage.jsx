@@ -5,6 +5,7 @@ import {
   ListChecks,
   RotateCcw,
 } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../hooks/useLanguage'
 import { useProgress } from '../hooks/useProgress'
@@ -19,9 +20,9 @@ const copy = {
     basics: 'Web Basics Quiz',
     basicsText: 'The original bilingual multiple-choice quiz from your Web Grundlagen PDF.',
     neck: 'IHK App by Nick Questions',
-    neckText: '10 direct PDF answers plus 55 focused study cards based on the topics listed in the new PDF.',
+    neckText: '100 direct PDF questions and answers based on the IHK question bank.',
     quizMeta: '100 questions · 5 levels',
-    studyMeta: '65 study questions · Questions & answers',
+    studyMeta: '100 study questions · Questions & answers',
     open: 'Open',
     continue: 'Continue',
     combined: 'Combined progress',
@@ -29,6 +30,13 @@ const copy = {
     total: 'Total study items',
     collections: 'Collections',
     reset: 'Reset all progress',
+    qaSectionTitle: 'Question & answer library',
+    qaSectionIntro: 'Open the list to view every quiz and study item with the correct answer.',
+    showQa: 'Show all Q&A',
+    hideQa: 'Hide Q&A',
+    quizType: 'Quiz question',
+    studyType: 'Study question',
+    answerLabel: 'Answer',
   },
   de: {
     title: 'Wähle dein Lernset',
@@ -36,9 +44,9 @@ const copy = {
     basics: 'Web-Grundlagen-Quiz',
     basicsText: 'Das ursprüngliche zweisprachige Multiple-Choice-Quiz aus deinem Web-Grundlagen-PDF.',
     neck: 'IHK App by Nick Questions',
-    neckText: '10 direkte PDF-Antworten plus 55 Lernkarten aus den Themen, die im neuen PDF aufgeführt sind.',
+    neckText: '100 direkte PDF-Fragen und -Antworten aus der IHK-Fragenbank.',
     quizMeta: '100 Fragen · 5 Level',
-    studyMeta: '65 Lernfragen · Fragen & Antworten',
+    studyMeta: '100 Lernfragen · Fragen & Antworten',
     open: 'Öffnen',
     continue: 'Fortsetzen',
     combined: 'Gesamtfortschritt',
@@ -46,6 +54,13 @@ const copy = {
     total: 'Lernelemente insgesamt',
     collections: 'Lernsets',
     reset: 'Gesamten Fortschritt zurücksetzen',
+    qaSectionTitle: 'Fragen- und Antwortbibliothek',
+    qaSectionIntro: 'Öffne die Liste, um jede Quiz- und Lernfrage mit der richtigen Antwort anzuzeigen.',
+    showQa: 'Alle Q&A anzeigen',
+    hideQa: 'Q&A ausblenden',
+    quizType: 'Quiz-Frage',
+    studyType: 'Lernfrage',
+    answerLabel: 'Antwort',
   },
 }
 
@@ -58,6 +73,29 @@ export default function LibraryPage() {
   const totalItems = questions.length + neckQuestions.length
   const completed = quizAnswered + studyViewed
   const percent = Math.round((completed / totalItems) * 100)
+  const [qaVisible, setQaVisible] = useState(false)
+
+  const qaItems = useMemo(() => {
+    const quizItems = questions.map((question) => ({
+      id: question.id,
+      type: 'quiz',
+      topic: question.topic[language],
+      question: question.prompt[language],
+      answer: question.correct
+        .map((index) => question.options[index][language])
+        .join(', '),
+    }))
+
+    const studyItems = neckQuestions.map((question) => ({
+      id: question.id,
+      type: 'study',
+      topic: question.topic[language],
+      question: question.question[language],
+      answer: question.answer[language],
+    }))
+
+    return [...quizItems, ...studyItems]
+  }, [language])
 
   return (
     <div className={styles.page}>
@@ -99,15 +137,51 @@ export default function LibraryPage() {
           </div>
           <div className={styles.collectionProgress}>
             <div>
-              <span style={{ width: `${Math.round((studyViewed / 65) * 100)}%` }} />
+              <span style={{ width: `${Math.round((studyViewed / neckQuestions.length) * 100)}%` }} />
             </div>
-            <strong>{Math.round((studyViewed / 65) * 100)}%</strong>
+            <strong>{Math.round((studyViewed / neckQuestions.length) * 100)}%</strong>
           </div>
           <Link to="/neck-questions" className={styles.action}>
             {studyViewed ? labels.continue : labels.open}
             <ArrowRight size={18} />
           </Link>
         </article>
+      </section>
+
+      <section className={styles.qaSection}>
+        <div className={styles.qaHeader}>
+          <div>
+            <h2>{labels.qaSectionTitle}</h2>
+            <p>{labels.qaSectionIntro}</p>
+          </div>
+          <button
+            type="button"
+            className={styles.toggleButton}
+            aria-expanded={qaVisible}
+            onClick={() => setQaVisible((visible) => !visible)}
+          >
+            {qaVisible ? labels.hideQa : labels.showQa}
+          </button>
+        </div>
+
+        {qaVisible ? (
+          <ul className={styles.qaList}>
+            {qaItems.map((item) => (
+              <li key={`${item.type}-${item.id}`} className={styles.qaItem}>
+                <div className={styles.qaMeta}>
+                  <span className={styles.qaType}>
+                    {item.type === 'quiz' ? labels.quizType : labels.studyType}
+                  </span>
+                  <small>{item.topic}</small>
+                </div>
+                <h3 className={styles.qaQuestion}>{item.question}</h3>
+                <p className={styles.qaAnswer}>
+                  <strong>{labels.answerLabel}:</strong> {item.answer}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </section>
 
       <section className={styles.summary}>
