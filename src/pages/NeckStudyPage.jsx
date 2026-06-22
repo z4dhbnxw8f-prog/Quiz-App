@@ -3,8 +3,8 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Trophy,
-  X,
+  Eye,
+  EyeOff,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -24,14 +24,12 @@ const copy = {
     question: 'Question',
     of: 'of',
     studied: 'Studied',
-    chooseOne: 'Choose one answer.',
-    check: 'Check answer',
-    correct: 'Correct — nicely done.',
-    wrong: 'Not quite. The correct answer is shown below.',
+    show: 'Show answer',
+    hide: 'Hide answer',
     answer: 'Answer',
     previous: 'Previous',
     next: 'Next question',
-    sourceNote: 'Questions 1–100 use the PDF content in both German and English.',
+    sourceNote: 'Questions 1–65 use the PDF content in both German and English.',
   },
   de: {
     back: 'Lernsets',
@@ -39,14 +37,12 @@ const copy = {
     question: 'Frage',
     of: 'von',
     studied: 'Gelernt',
-    chooseOne: 'Wähle eine Antwort.',
-    check: 'Antwort prüfen',
-    correct: 'Richtig — gut gemacht.',
-    wrong: 'Noch nicht ganz. Die richtige Antwort wird unten angezeigt.',
+    show: 'Antwort zeigen',
+    hide: 'Antwort verbergen',
     answer: 'Antwort',
     previous: 'Zurück',
     next: 'Nächste Frage',
-    sourceNote: 'Fragen 1–100 verwenden den PDF-Inhalt in Deutsch und Englisch.',
+    sourceNote: 'Fragen 1–10 verwenden die direkten Antworten aus dem PDF. Fragen 11–65 sind kompakte Lernantworten zu den Themen, die im PDF aufgelistet sind.',
   },
 }
 
@@ -60,38 +56,21 @@ export default function NeckStudyPage() {
   const [currentIndex, setCurrentIndex] = useState(
     firstUnviewed === -1 ? 0 : firstUnviewed,
   )
-  const [selected, setSelected] = useState(null)
-  const [checked, setChecked] = useState(false)
-  const [isCorrect, setIsCorrect] = useState(false)
-  const [message, setMessage] = useState('')
+  const [answerVisible, setAnswerVisible] = useState(false)
   const question = neckQuestions[currentIndex]
   const viewed = useMemo(() => new Set(progress.studyViewed), [progress.studyViewed])
   const progressPercent = ((currentIndex + 1) / neckQuestions.length) * 100
 
   const showQuestion = (index) => {
     setCurrentIndex(Math.max(0, Math.min(neckQuestions.length - 1, index)))
-    setSelected(null)
-    setChecked(false)
-    setIsCorrect(false)
-    setMessage('')
+    setAnswerVisible(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const selectAnswer = (index) => {
-    if (checked) return
-    setMessage('')
-    setSelected(index)
-  }
-
-  const checkAnswer = () => {
-    if (selected === null) {
-      setMessage(labels.chooseOne)
-      return
-    }
-    const correct = question.correct === selected
-    setIsCorrect(correct)
-    setChecked(true)
-    markStudyViewed(question.id)
+  const toggleAnswer = () => {
+    const nextVisible = !answerVisible
+    setAnswerVisible(nextVisible)
+    if (nextVisible) markStudyViewed(question.id)
   }
 
   return (
@@ -110,7 +89,7 @@ export default function NeckStudyPage() {
         <div className={styles.studied}>
           <Check size={20} />
           <span>{labels.studied}</span>
-          <strong>{progress.studyViewed.length} / {neckQuestions.length}</strong>
+          <strong>{progress.studyViewed.length} / 65</strong>
         </div>
       </div>
 
@@ -129,12 +108,12 @@ export default function NeckStudyPage() {
                 key={group.id}
                 type="button"
                 className={`${styles.groupButton} ${active ? styles.activeGroup : ''}`}
-                onClick={() => showQuestion(neckQuestions.findIndex((item) => item.group === group.id))}
+                onClick={() => showQuestion((group.id - 1) * 13)}
               >
                 <span className={`${styles.groupNumber} ${styles[group.color]}`}>{group.id}</span>
                 <span>
                   <strong>{t(group.title)}</strong>
-                  <small>{groupComplete} / {groupQuestions.length}</small>
+                  <small>{groupComplete} / 13</small>
                 </span>
               </button>
             )
@@ -144,50 +123,19 @@ export default function NeckStudyPage() {
         <article className={styles.studyCard}>
           <p className={styles.topic}>{t(question.topic)}</p>
           <h2>{t(question.question)}</h2>
-          <p className={styles.instruction}>{labels.chooseOne}</p>
 
-          <div className={styles.options}>
-            {question.options.map((option, index) => {
-              const isSelected = selected === index
-              const isCorrectOption = question.correct === index
-              const showCorrect = checked && isCorrectOption
-              const showWrong = checked && isSelected && !isCorrectOption
-              const buttonClass = [
-                styles.optionButton,
-                isSelected ? styles.selectedOption : '',
-                showCorrect ? styles.correctOption : '',
-                showWrong ? styles.wrongOption : '',
-              ]
-                .filter(Boolean)
-                .join(' ')
+          <button type="button" className={styles.reveal} onClick={toggleAnswer}>
+            {answerVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+            {answerVisible ? labels.hide : labels.show}
+          </button>
 
-              return (
-                <button
-                  key={`${question.id}-${index}`}
-                  type="button"
-                  className={buttonClass}
-                  onClick={() => selectAnswer(index)}
-                  aria-pressed={isSelected}
-                >
-                  <span className={styles.optionLetter}>{String.fromCharCode(65 + index)}</span>
-                  <span>{t(option)}</span>
-                  {showCorrect ? <Check className={styles.optionIcon} size={18} /> : null}
-                  {showWrong ? <X className={styles.optionIcon} size={18} /> : null}
-                </button>
-              )
-            })}
+          <div
+            className={`${styles.answerPanel} ${answerVisible ? styles.answerVisible : ''}`}
+            aria-hidden={!answerVisible}
+          >
+            <span>{labels.answer}</span>
+            <p>{t(question.answer)}</p>
           </div>
-
-          {message ? <p className={styles.validation}>{message}</p> : null}
-
-          {checked ? (
-            <div className={`${styles.feedback} ${isCorrect ? styles.good : styles.bad}`}>
-              <strong>{isCorrect ? labels.correct : labels.wrong}</strong>
-              <span>
-                {labels.answer}: {t(question.answer)}
-              </span>
-            </div>
-          ) : null}
 
           <div className={styles.navigation}>
             <button
@@ -201,16 +149,10 @@ export default function NeckStudyPage() {
             <button
               type="button"
               className={styles.next}
-              disabled={currentIndex === neckQuestions.length - 1 && !checked}
-              onClick={() => {
-                if (!checked) {
-                  checkAnswer()
-                } else {
-                  showQuestion(currentIndex + 1)
-                }
-              }}
+              disabled={currentIndex === neckQuestions.length - 1}
+              onClick={() => showQuestion(currentIndex + 1)}
             >
-              {checked ? labels.next : labels.check}
+              {labels.next}
               <ChevronRight size={19} />
             </button>
           </div>
