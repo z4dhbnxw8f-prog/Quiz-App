@@ -271,6 +271,87 @@
   cursor: pointer;
 }
 
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.searchBox {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 36px;
+  align-items: center;
+  width: min(100%, 680px);
+  min-height: 50px;
+  padding: 0 7px 0 15px;
+  border: 1px solid #c8d3e2;
+  border-radius: 13px;
+  background: #f9fbff;
+  color: #718096;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.searchBox:focus-within {
+  border-color: var(--blue);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(17, 88, 237, 0.1);
+}
+
+.searchBox input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 10px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+}
+
+.searchBox input::placeholder {
+  color: #8995a8;
+}
+
+.searchBox input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.searchBox button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #718096;
+}
+
+.searchBox button:hover {
+  color: var(--blue);
+  background: #eaf1ff;
+}
+
+.resultCount {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .qaList {
   display: grid;
   gap: 14px;
@@ -318,6 +399,17 @@
   color: #172a4d;
   font-size: 15px;
   line-height: 1.7;
+}
+
+.emptyState {
+  margin: 0;
+  padding: 34px 20px;
+  color: var(--muted);
+  border: 1px dashed #c8d3e2;
+  border-radius: 16px;
+  background: #f9fbff;
+  font-size: 15px;
+  text-align: center;
 }
 
 .reset {
@@ -407,5 +499,27 @@
 
   .reset {
     grid-column: 1 / -1;
+  }
+
+  .qaSection {
+    padding: 22px 18px;
+  }
+
+  .qaHeader,
+  .searchRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toggleButton {
+    width: 100%;
+  }
+
+  .searchBox {
+    width: 100%;
+  }
+
+  .resultCount {
+    align-self: flex-start;
   }
 }

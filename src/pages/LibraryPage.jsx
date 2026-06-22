@@ -4,6 +4,8 @@ import {
   BrainCircuit,
   ListChecks,
   RotateCcw,
+  Search,
+  X,
 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -37,6 +39,11 @@ const copy = {
     quizType: 'Quiz question',
     studyType: 'Nick quiz question',
     answerLabel: 'Answer',
+    searchLabel: 'Search questions',
+    searchPlaceholder: 'Search by keyword, topic, question, or answer…',
+    clearSearch: 'Clear search',
+    results: 'results',
+    noResults: 'No questions match this keyword.',
   },
   de: {
     title: 'Wähle dein Lernset',
@@ -61,8 +68,19 @@ const copy = {
     quizType: 'Quiz-Frage',
     studyType: 'Nick-Quizfrage',
     answerLabel: 'Antwort',
+    searchLabel: 'Fragen durchsuchen',
+    searchPlaceholder: 'Nach Stichwort, Thema, Frage oder Antwort suchen…',
+    clearSearch: 'Suche löschen',
+    results: 'Ergebnisse',
+    noResults: 'Keine Fragen passen zu diesem Stichwort.',
   },
 }
+
+const normalizeSearch = (value) =>
+  value
+    .normalize('NFKD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLocaleLowerCase()
 
 export default function LibraryPage() {
   const { language } = useLanguage()
@@ -74,6 +92,7 @@ export default function LibraryPage() {
   const completed = quizAnswered + neckAnswered
   const percent = Math.round((completed / totalItems) * 100)
   const [qaVisible, setQaVisible] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const qaItems = useMemo(() => {
     const quizItems = questions.map((question) => ({
@@ -84,6 +103,13 @@ export default function LibraryPage() {
       answer: question.correct
         .map((index) => question.options[index][language])
         .join(', '),
+      searchText: [
+        question.topic.de,
+        question.topic.en,
+        question.prompt.de,
+        question.prompt.en,
+        ...question.options.flatMap((option) => [option.de, option.en]),
+      ].join(' '),
     }))
 
     const studyItems = neckQuestions.map((question) => ({
@@ -94,10 +120,26 @@ export default function LibraryPage() {
       answer: question.correct
         .map((index) => question.options[index][language])
         .join(', '),
+      searchText: [
+        question.topic.de,
+        question.topic.en,
+        question.prompt.de,
+        question.prompt.en,
+        ...question.options.flatMap((option) => [option.de, option.en]),
+      ].join(' '),
     }))
 
     return [...quizItems, ...studyItems]
   }, [language])
+
+  const normalizedQuery = normalizeSearch(searchQuery.trim())
+  const filteredQaItems = useMemo(
+    () => normalizedQuery
+      ? qaItems.filter((item) => normalizeSearch(item.searchText).includes(normalizedQuery))
+      : qaItems,
+    [normalizedQuery, qaItems],
+  )
+  const listVisible = qaVisible || normalizedQuery.length > 0
 
   return (
     <div className={styles.page}>
@@ -166,23 +208,54 @@ export default function LibraryPage() {
           </button>
         </div>
 
-        {qaVisible ? (
-          <ul className={styles.qaList}>
-            {qaItems.map((item) => (
-              <li key={`${item.type}-${item.id}`} className={styles.qaItem}>
-                <div className={styles.qaMeta}>
-                  <span className={styles.qaType}>
-                    {item.type === 'quiz' ? labels.quizType : labels.studyType}
-                  </span>
-                  <small>{item.topic}</small>
-                </div>
-                <h3 className={styles.qaQuestion}>{item.question}</h3>
-                <p className={styles.qaAnswer}>
-                  <strong>{labels.answerLabel}:</strong> {item.answer}
-                </p>
-              </li>
-            ))}
-          </ul>
+        <div className={styles.searchRow}>
+          <label className={styles.searchBox}>
+            <span className={styles.srOnly}>{labels.searchLabel}</span>
+            <Search size={19} aria-hidden="true" />
+            <input
+              type="search"
+              value={searchQuery}
+              placeholder={labels.searchPlaceholder}
+              onChange={(event) => setSearchQuery(event.target.value)}
+            />
+            {searchQuery ? (
+              <button
+                type="button"
+                aria-label={labels.clearSearch}
+                onClick={() => setSearchQuery('')}
+              >
+                <X size={17} />
+              </button>
+            ) : null}
+          </label>
+          {normalizedQuery ? (
+            <span className={styles.resultCount}>
+              {filteredQaItems.length} {labels.results}
+            </span>
+          ) : null}
+        </div>
+
+        {listVisible ? (
+          filteredQaItems.length > 0 ? (
+            <ul className={styles.qaList}>
+              {filteredQaItems.map((item) => (
+                <li key={`${item.type}-${item.id}`} className={styles.qaItem}>
+                  <div className={styles.qaMeta}>
+                    <span className={styles.qaType}>
+                      {item.type === 'quiz' ? labels.quizType : labels.studyType}
+                    </span>
+                    <small>{item.topic}</small>
+                  </div>
+                  <h3 className={styles.qaQuestion}>{item.question}</h3>
+                  <p className={styles.qaAnswer}>
+                    <strong>{labels.answerLabel}:</strong> {item.answer}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.emptyState}>{labels.noResults}</p>
+          )
         ) : null}
       </section>
 
