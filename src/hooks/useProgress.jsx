@@ -3,8 +3,9 @@ import { createContext, useContext, useMemo, useState } from 'react'
 
 const STORAGE_KEY = 'webwise-progress-v2'
 const initialProgress = {
-  version: 3,
+  version: 4,
   answers: {},
+  neckAnswers: {},
   studyViewed: [],
 }
 
@@ -44,6 +45,20 @@ export function ProgressProvider({ children }) {
     })
   }
 
+  const recordNeckAnswer = (question, isCorrect) => {
+    setProgress((current) => {
+      const next = {
+        ...current,
+        neckAnswers: {
+          ...current.neckAnswers,
+          [question.id]: isCorrect,
+        },
+      }
+      saveProgress(next)
+      return next
+    })
+  }
+
   const resetProgress = () => {
     saveProgress(initialProgress)
     setProgress(initialProgress)
@@ -62,7 +77,13 @@ export function ProgressProvider({ children }) {
   }
 
   const value = useMemo(
-    () => ({ progress, recordAnswer, resetProgress, markStudyViewed }),
+    () => ({
+      progress,
+      recordAnswer,
+      recordNeckAnswer,
+      resetProgress,
+      markStudyViewed,
+    }),
     [progress],
   )
 

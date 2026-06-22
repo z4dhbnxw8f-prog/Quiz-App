@@ -16,13 +16,13 @@ import styles from './LibraryPage.module.css'
 const copy = {
   en: {
     title: 'Choose your study set',
-    intro: 'Train with the original Web Basics quiz or revise the new IHK question-and-answer collection.',
+    intro: 'Train with either of the two 100-question multiple-choice sets.',
     basics: 'Web Basics Quiz',
     basicsText: 'The original bilingual multiple-choice quiz from your Web Grundlagen PDF.',
     neck: 'IHK App by Nick Questions',
-    neckText: '100 direct PDF questions and answers based on the IHK question bank.',
+    neckText: '100 multiple-choice questions taken directly from the IHK Trainer PDF.',
     quizMeta: '100 questions · 5 levels',
-    studyMeta: '100 study questions · Questions & answers',
+    studyMeta: '100 questions · 5 groups',
     open: 'Open',
     continue: 'Continue',
     combined: 'Combined progress',
@@ -31,22 +31,22 @@ const copy = {
     collections: 'Collections',
     reset: 'Reset all progress',
     qaSectionTitle: 'Question & answer library',
-    qaSectionIntro: 'Open the list to view every quiz and study item with the correct answer.',
+    qaSectionIntro: 'Open the list to view every question from both quizzes with the correct answer.',
     showQa: 'Show all Q&A',
     hideQa: 'Hide Q&A',
     quizType: 'Quiz question',
-    studyType: 'Study question',
+    studyType: 'Nick quiz question',
     answerLabel: 'Answer',
   },
   de: {
     title: 'Wähle dein Lernset',
-    intro: 'Trainiere mit dem ursprünglichen Web-Grundlagen-Quiz oder lerne mit der neuen IHK-Fragen-und-Antworten-Sammlung.',
+    intro: 'Trainiere mit einem von zwei Multiple-Choice-Sets mit jeweils 100 Fragen.',
     basics: 'Web-Grundlagen-Quiz',
     basicsText: 'Das ursprüngliche zweisprachige Multiple-Choice-Quiz aus deinem Web-Grundlagen-PDF.',
     neck: 'IHK App by Nick Questions',
-    neckText: '100 direkte PDF-Fragen und -Antworten aus der IHK-Fragenbank.',
+    neckText: '100 Multiple-Choice-Fragen direkt aus dem IHK-Trainer-PDF.',
     quizMeta: '100 Fragen · 5 Level',
-    studyMeta: '100 Lernfragen · Fragen & Antworten',
+    studyMeta: '100 Fragen · 5 Gruppen',
     open: 'Öffnen',
     continue: 'Fortsetzen',
     combined: 'Gesamtfortschritt',
@@ -55,11 +55,11 @@ const copy = {
     collections: 'Lernsets',
     reset: 'Gesamten Fortschritt zurücksetzen',
     qaSectionTitle: 'Fragen- und Antwortbibliothek',
-    qaSectionIntro: 'Öffne die Liste, um jede Quiz- und Lernfrage mit der richtigen Antwort anzuzeigen.',
+    qaSectionIntro: 'Öffne die Liste, um jede Frage aus beiden Quizzen mit der richtigen Antwort anzuzeigen.',
     showQa: 'Alle Q&A anzeigen',
     hideQa: 'Q&A ausblenden',
     quizType: 'Quiz-Frage',
-    studyType: 'Lernfrage',
+    studyType: 'Nick-Quizfrage',
     answerLabel: 'Antwort',
   },
 }
@@ -69,9 +69,9 @@ export default function LibraryPage() {
   const { progress, resetProgress } = useProgress()
   const labels = copy[language]
   const quizAnswered = Object.keys(progress.answers).length
-  const studyViewed = progress.studyViewed.length
+  const neckAnswered = Object.keys(progress.neckAnswers).length
   const totalItems = questions.length + neckQuestions.length
-  const completed = quizAnswered + studyViewed
+  const completed = quizAnswered + neckAnswered
   const percent = Math.round((completed / totalItems) * 100)
   const [qaVisible, setQaVisible] = useState(false)
 
@@ -90,8 +90,10 @@ export default function LibraryPage() {
       id: question.id,
       type: 'study',
       topic: question.topic[language],
-      question: question.question[language],
-      answer: question.answer[language],
+      question: question.prompt[language],
+      answer: question.correct
+        .map((index) => question.options[index][language])
+        .join(', '),
     }))
 
     return [...quizItems, ...studyItems]
@@ -137,12 +139,12 @@ export default function LibraryPage() {
           </div>
           <div className={styles.collectionProgress}>
             <div>
-              <span style={{ width: `${Math.round((studyViewed / neckQuestions.length) * 100)}%` }} />
+              <span style={{ width: `${Math.round((neckAnswered / neckQuestions.length) * 100)}%` }} />
             </div>
-            <strong>{Math.round((studyViewed / neckQuestions.length) * 100)}%</strong>
+            <strong>{Math.round((neckAnswered / neckQuestions.length) * 100)}%</strong>
           </div>
           <Link to="/neck-questions" className={styles.action}>
-            {studyViewed ? labels.continue : labels.open}
+            {neckAnswered ? labels.continue : labels.open}
             <ArrowRight size={18} />
           </Link>
         </article>
